@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SurveyManagerApp.Tests/SurveyManagerApp.Tests.csproj" Id="6f39233a-2e9d-4252-b8f3-31b11c268cfc" />
+  <Project Path="SurveyManagerApp/SurveyManagerApp.csproj" Id="2f30e5df-f89d-401c-b50e-3afcc10b5527" />
+</Solution>

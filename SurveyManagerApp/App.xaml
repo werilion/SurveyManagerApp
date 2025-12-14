@@ -1,0 +1,10 @@
+﻿<Application x:Class="SurveyManagerApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:SurveyManagerApp.Converters">
+    <Application.Resources>
+        <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+        <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+        <converters:QuestionTypeToStringConverter x:Key="QuestionTypeToStringConverter" />
+    </Application.Resources>
+</Application>
