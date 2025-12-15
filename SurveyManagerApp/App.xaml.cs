@@ -23,12 +23,15 @@ namespace SurveyManagerApp
         {
             // Зарегистрируйте сервисы
             services.AddSingleton<SurveyService>(provider => new SurveyService());
+            // Добавляем AnswerService
+            services.AddSingleton<AnswerService>(provider => new AnswerService());
             // Зарегистрируйте ViewModel
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainWindow>(); // Зарегистрируйте Window как зависимость
             services.AddTransient<EditSurveyWindow>();
             services.AddTransient<EditSurveyViewModel>();
             services.AddTransient<TakeSurveyWindow>();
+            // Передаём AnswerService в TakeSurveyViewModel
             services.AddTransient<TakeSurveyViewModel>();
         }
 

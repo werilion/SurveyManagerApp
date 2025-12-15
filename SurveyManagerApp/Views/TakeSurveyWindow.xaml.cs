@@ -1,10 +1,12 @@
-﻿using SurveyManagerApp.ViewModels;
+﻿using SurveyManagerApp.Services; // Добавлено
+using SurveyManagerApp.ViewModels;
 using System.Windows;
 
 namespace SurveyManagerApp.Views
 {
     public partial class TakeSurveyWindow : Window
     {
+        // Принимаем AnswerService через конструктор
         public TakeSurveyWindow(TakeSurveyViewModel viewModel)
         {
             InitializeComponent();
@@ -15,7 +17,6 @@ namespace SurveyManagerApp.Views
         {
             if (DataContext is TakeSurveyViewModel viewModel)
             {
-                // Вызываем команду отправки
                 viewModel.SubmitCommand.Execute(null);
                 // Окно закрывается после выполнения команды
                 // this.Close(); // Можно вызвать здесь, если VM не управляет этим

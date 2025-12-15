@@ -17,6 +17,7 @@ namespace SurveyManagerApp.ViewModels
     public partial class MainWindowViewModel : ObservableObject
     {
         private readonly SurveyService _surveyService;
+        private readonly AnswerService _answerService; // Добавлено
 
         public ObservableCollection<Survey> Surveys { get; set; }
 
@@ -70,9 +71,11 @@ namespace SurveyManagerApp.ViewModels
         public ICommand NewSurveyCommand { get; }
         public ICommand ExportSurveyCommand { get; }
 
-        public MainWindowViewModel(SurveyService surveyService)
+        // Принимаем оба сервиса через DI
+        public MainWindowViewModel(SurveyService surveyService, AnswerService answerService)
         {
             _surveyService = surveyService;
+            _answerService = answerService; // Сохраняем
             Surveys = new ObservableCollection<Survey>();
             LoadSurveys();
 
@@ -109,7 +112,7 @@ namespace SurveyManagerApp.ViewModels
                 newSurvey.Questions = new System.Collections.ObjectModel.ObservableCollection<Question>();
 
                 var editWindow = new EditSurveyWindow(new EditSurveyViewModel(newSurvey, _surveyService));
-                editWindow.ShowDialog(); // Показываем как модальное
+                editWindow.ShowDialog();
                 LoadSurveys();
                 NewSurveyTitle = string.Empty;
                 NewSurveyDescription = string.Empty;
@@ -121,8 +124,8 @@ namespace SurveyManagerApp.ViewModels
             if (SelectedSurvey != null)
             {
                 var editWindow = new EditSurveyWindow(new EditSurveyViewModel(SelectedSurvey, _surveyService));
-                editWindow.ShowDialog(); // Показываем как модальное
-                LoadSurveys(); // Обновляем список после закрытия диалога
+                editWindow.ShowDialog();
+                LoadSurveys();
             }
         }
 
@@ -130,9 +133,10 @@ namespace SurveyManagerApp.ViewModels
         {
             if (SelectedSurvey != null)
             {
-                var takeWindow = new TakeSurveyWindow(new TakeSurveyViewModel(SelectedSurvey));
-                takeWindow.ShowDialog(); // Показываем как модальное
-                // Здесь можно обновить статистику, если она реализована
+                // Передаём AnswerService в конструктор TakeSurveyViewModel
+                var takeViewModel = new TakeSurveyViewModel(SelectedSurvey, _answerService);
+                var takeWindow = new TakeSurveyWindow(takeViewModel);
+                takeWindow.ShowDialog();
             }
         }
 

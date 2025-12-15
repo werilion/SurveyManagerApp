@@ -144,6 +144,7 @@
     <Compile Include="Converters\NullToBoolConverter.cs" />
     <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
     <Compile Include="Converters\QuestionTypeToStringConverter.cs" />
+    <Compile Include="Services\AnswerService.cs" />
     <Compile Include="Services\SurveyService.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
