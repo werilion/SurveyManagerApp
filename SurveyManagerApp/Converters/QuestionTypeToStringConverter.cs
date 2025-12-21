@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SurveyManagerApp.Models;
+﻿using SurveyManagerApp.Models;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -24,7 +20,7 @@ namespace SurveyManagerApp.Converters
                     case QuestionType.MultipleChoice:
                         return "Множественный выбор";
                     default:
-                        return type.ToString(); // Возвратить строку, если тип неизвестен
+                        return type.ToString();
                 }
             }
             return string.Empty;

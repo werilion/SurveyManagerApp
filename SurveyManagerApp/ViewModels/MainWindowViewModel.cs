@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using SurveyManagerApp.Models;
 using SurveyManagerApp.Services;
-using SurveyManagerApp.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,15 +15,14 @@ namespace SurveyManagerApp.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        private readonly SurveyService _surveyService;
-        private readonly AnswerService _answerService; // Добавлено
-
+        public SurveyService SurveyService { get; }
+        public AnswerService AnswerService { get; }
         public ObservableCollection<Survey> Surveys { get; set; }
 
         private Survey _selectedSurvey;
         public Survey SelectedSurvey
         {
-            get { return _selectedSurvey; }
+            get => _selectedSurvey;
             set
             {
                 if (_selectedSurvey != value)
@@ -39,7 +37,7 @@ namespace SurveyManagerApp.ViewModels
         private string _newSurveyTitle = string.Empty;
         public string NewSurveyTitle
         {
-            get { return _newSurveyTitle; }
+            get => _newSurveyTitle;
             set
             {
                 if (_newSurveyTitle != value)
@@ -53,7 +51,7 @@ namespace SurveyManagerApp.ViewModels
         private string _newSurveyDescription = string.Empty;
         public string NewSurveyDescription
         {
-            get { return _newSurveyDescription; }
+            get => _newSurveyDescription;
             set
             {
                 if (_newSurveyDescription != value)
@@ -68,28 +66,25 @@ namespace SurveyManagerApp.ViewModels
         public ICommand EditSurveyCommand { get; }
         public ICommand TakeSurveyCommand { get; }
         public ICommand DeleteSurveyCommand { get; }
-        public ICommand NewSurveyCommand { get; }
         public ICommand ExportSurveyCommand { get; }
 
-        // Принимаем оба сервиса через DI
         public MainWindowViewModel(SurveyService surveyService, AnswerService answerService)
         {
-            _surveyService = surveyService;
-            _answerService = answerService; // Сохраняем
-            Surveys = new ObservableCollection<Survey>();
+            SurveyService = surveyService;
+            AnswerService = answerService;
+            Surveys = new ObservableCollection<Survey>(); // ЯВНОЕ указание типа
             LoadSurveys();
 
             AddSurveyCommand = new RelayCommand(AddSurvey);
             EditSurveyCommand = new RelayCommand(EditSurvey, CanEditOrTakeSurvey);
             TakeSurveyCommand = new RelayCommand(TakeSurvey, CanEditOrTakeSurvey);
             DeleteSurveyCommand = new RelayCommand(DeleteSurvey, CanDeleteSurvey);
-            NewSurveyCommand = new RelayCommand(NewSurvey);
             ExportSurveyCommand = new RelayCommand(ExportSurvey, CanExportSurvey);
         }
 
-        private void LoadSurveys()
+        public void LoadSurveys()
         {
-            var loadedSurveys = _surveyService.GetAllSurveys();
+            var loadedSurveys = SurveyService.GetAllSurveys();
             Surveys.Clear();
             foreach (var survey in loadedSurveys)
             {
@@ -97,66 +92,18 @@ namespace SurveyManagerApp.ViewModels
             }
         }
 
-        private void AddSurvey()
-        {
-            NewSurvey();
-        }
+        private void AddSurvey() { }
+        private void EditSurvey() { }
+        private void TakeSurvey() { }
 
-        private void NewSurvey()
-        {
-            if (!string.IsNullOrWhiteSpace(NewSurveyTitle))
-            {
-                var newSurvey = new Survey();
-                newSurvey.Title = NewSurveyTitle;
-                newSurvey.Description = NewSurveyDescription;
-                newSurvey.Questions = new System.Collections.ObjectModel.ObservableCollection<Question>();
-
-                var editWindow = new EditSurveyWindow(new EditSurveyViewModel(newSurvey, _surveyService));
-                editWindow.ShowDialog();
-                LoadSurveys();
-                NewSurveyTitle = string.Empty;
-                NewSurveyDescription = string.Empty;
-            }
-        }
-
-        private void EditSurvey()
+        // ИСПРАВЛЕНО: метод теперь PUBLIC
+        public void DeleteSurvey()
         {
             if (SelectedSurvey != null)
             {
-                var editWindow = new EditSurveyWindow(new EditSurveyViewModel(SelectedSurvey, _surveyService));
-                editWindow.ShowDialog();
-                LoadSurveys();
-            }
-        }
-
-        private void TakeSurvey()
-        {
-            if (SelectedSurvey != null)
-            {
-                // Передаём AnswerService в конструктор TakeSurveyViewModel
-                var takeViewModel = new TakeSurveyViewModel(SelectedSurvey, _answerService);
-                var takeWindow = new TakeSurveyWindow(takeViewModel);
-                takeWindow.ShowDialog();
-            }
-        }
-
-        private void DeleteSurvey()
-        {
-            var surveys = Surveys;
-            var selectedSurvey = SelectedSurvey;
-
-            if (surveys != null && selectedSurvey != null)
-            {
-                if (surveys.Contains(selectedSurvey))
-                {
-                    surveys.Remove(selectedSurvey);
-                    _surveyService.DeleteSurvey(selectedSurvey.Id);
-                    SelectedSurvey = null;
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("Попытка удалить элемент, которого нет в коллекции Surveys.");
-                }
+                SurveyService.DeleteSurvey(SelectedSurvey.Id);
+                Surveys.Remove(SelectedSurvey);
+                SelectedSurvey = null;
             }
         }
 

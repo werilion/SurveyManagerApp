@@ -13,7 +13,7 @@
             <TextBlock Text="Создать новый опрос" FontWeight="Bold" />
             <TextBox x:Name="NewSurveyTitleTextBox" Text="{Binding NewSurveyTitle, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBox x:Name="NewSurveyDescriptionTextBox" Text="{Binding NewSurveyDescription, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" Height="50"/>
-            <Button Content="Новый опрос" Command="{Binding NewSurveyCommand}" Margin="0,5,0,0"/>
+            <Button Content="Новый опрос" Click="NewSurveyButton_Click" Margin="0,5,0,0"/>
         </StackPanel>
 
         <ListBox Grid.Row="1" ItemsSource="{Binding Surveys}" SelectedItem="{Binding SelectedSurvey}">
@@ -29,13 +29,11 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- ОБНОВЛЁННАЯ панель кнопок -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Редактировать" Command="{Binding EditSurveyCommand}" Margin="0,0,10,0" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
-            <Button Content="Пройти" Command="{Binding TakeSurveyCommand}" Margin="0,0,10,0" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
-            <!-- НОВАЯ кнопка "Экспорт" -->
+            <Button Content="Редактировать" Click="EditSurveyButton_Click" Margin="0,0,10,0" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
+            <Button Content="Пройти" Click="TakeSurveyButton_Click" Margin="0,0,10,0" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
             <Button Content="Экспорт" Command="{Binding ExportSurveyCommand}" Margin="0,0,10,0" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
-            <Button Content="Удалить" Command="{Binding DeleteSurveyCommand}" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
+            <Button Content="Удалить" Click="DeleteSurveyButton_Click" IsEnabled="{Binding SelectedSurvey, Converter={StaticResource NullToBoolConverter}}"/>
         </StackPanel>
     </Grid>
 </Window>

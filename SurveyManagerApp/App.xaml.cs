@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SurveyManagerApp.Services;
 using SurveyManagerApp.ViewModels;
-using SurveyManagerApp.Views;
-using System;
 using System.Windows;
 
 namespace SurveyManagerApp
@@ -21,23 +19,18 @@ namespace SurveyManagerApp
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // Зарегистрируйте сервисы
-            services.AddSingleton<SurveyService>(provider => new SurveyService());
-            // Добавляем AnswerService
-            services.AddSingleton<AnswerService>(provider => new AnswerService());
-            // Зарегистрируйте ViewModel
+            services.AddSingleton<SurveyService>();
+            services.AddSingleton<AnswerService>();
+            services.AddTransient<MainWindow>();
             services.AddTransient<MainWindowViewModel>();
-            services.AddTransient<MainWindow>(); // Зарегистрируйте Window как зависимость
-            services.AddTransient<EditSurveyWindow>();
+            services.AddTransient<Views.EditSurveyWindow>();
             services.AddTransient<EditSurveyViewModel>();
-            services.AddTransient<TakeSurveyWindow>();
-            // Передаём AnswerService в TakeSurveyViewModel
+            services.AddTransient<Views.TakeSurveyWindow>();
             services.AddTransient<TakeSurveyViewModel>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // Загружаем MainWindow через DI
             var mainWindow = _serviceProvider.GetService<MainWindow>();
             mainWindow.Show();
         }

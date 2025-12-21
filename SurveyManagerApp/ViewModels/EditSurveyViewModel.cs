@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using SurveyManagerApp.Models;
 using SurveyManagerApp.Services;
-using System.Collections.ObjectModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -16,15 +16,12 @@ namespace SurveyManagerApp.ViewModels
         public Survey Survey { get; }
         private readonly List<QuestionType> _questionTypesList;
 
-        public IEnumerable<QuestionType> QuestionTypes
-        {
-            get { return _questionTypesList; }
-        }
+        public IEnumerable<QuestionType> QuestionTypes => _questionTypesList;
 
         private Question _selectedQuestion;
         public Question SelectedQuestion
         {
-            get { return _selectedQuestion; }
+            get => _selectedQuestion;
             set
             {
                 if (_selectedQuestion != value)
@@ -42,11 +39,11 @@ namespace SurveyManagerApp.ViewModels
         public ICommand RemoveOptionCommand { get; }
         public ICommand SaveCommand { get; }
 
+        // ИСПРАВЛЕНО: конструктор принимает только 2 аргумента
         public EditSurveyViewModel(Survey survey, SurveyService surveyService)
         {
             Survey = survey;
             _surveyService = surveyService;
-
             _questionTypesList = new List<QuestionType>(Enum.GetValues(typeof(QuestionType)).Cast<QuestionType>());
 
             AddQuestionCommand = new RelayCommand(AddQuestion);
@@ -90,7 +87,6 @@ namespace SurveyManagerApp.ViewModels
         private void Save()
         {
             _surveyService.SaveSurvey(Survey);
-            // ViewModel не вызывает Close(). Это делает View.
         }
     }
 }
